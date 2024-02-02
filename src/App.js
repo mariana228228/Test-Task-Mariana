@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { FeedsProvider } from './context/FeedsContext';
+import Login from './components/Login';
+import FeedList from './components/FeedList';
+import FeedArticles from './components/FeedArticles';
+import ArticleDetail from './components/ArticleDetail';
 
-function App() {
+const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const handleLogin = (username) => {
+    setCurrentUser(username);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <FeedsProvider>
+      <Router>
+        <Switch>
+          <Route exact path="/" render={() => <Login onLogin={handleLogin} />} />
+          <Route path="/feeds" component={FeedList} />
+          <Route path="/articles/:feedId" component={FeedArticles} />
+          <Route path="/article/:articleId" component={ArticleDetail} />
+        </Switch>
+      </Router>
+    </FeedsProvider>
   );
-}
+};
 
 export default App;
